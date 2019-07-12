@@ -1,0 +1,64 @@
+---
+title: "cleanhop"
+author: "Orian Bricard"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cleanhop}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Index hopping
+-------
+
+Index hopping is a phenomenon in which index sequences are physically changed in
+the early steps of template amplification arising on the sequencing flow lane.
+This can be attributed either to residual index adapters that were not properly
+purified out or to degraded library molecules that contain index sequences. This
+material binds intact library molecules during their amplification on the flow
+lane and leads to a change of the index sequence, like what is obtained with a
+mutagenesis primer.  
+In the context of combinatorial dual index barcoding, index sequencing errors and index
+hopping are more likely to result in read sample misassignment if the donor
+sample/cell share already shares one index with the recipient sample/cell.
+
+
+## Cleanhop
+------
+
+Cleanhop aims to remove potential misassigned reads due to index hopping in
+single cell RNAseq data generated with combinatorial dual indexes (e.g.Nextera
+XT). For each cell and for each gene, it subtracts from the number of reads a
+percentage (0.5% by default) of the sum of the reads associated with the gene
+among all the cells sharing the same i7 index (column), and the sum of all the reads
+associated with the gene among all the cells sharing the same i5 index (row).  
+This treatment might mask the true expression of genes that are expressed at <100
+lower level than other cells in the same row/column. However, index hopping
+anyway prevents any confident conclusion regarding such expression.
+
+## Usage
+-----
+
+Cleanhop is intented to be use on SingleCellExperiment (sce) class object.  
+colData must contain columns specifing i5 and i7 identities.  
+if sce contains cells which have been sequenced on multiples flow lanes or in multiples run, colData must contain columns specifing flow lane identities and/or run identities.  
+Value of substracted percentage is set by default to 0.5% but can be adjusted for your dataset as index hopping likelyhood is dependant of library quality. 
+
+
+
+
+
+
+```{r setup}
+##library(cleanhop)
+
+```
