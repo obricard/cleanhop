@@ -13,9 +13,11 @@
 #' indexplot(sce, "CCR8")
 
 indexplot = function(sce, goi) {
-  colData(sce)$goi_counts = counts(sce)[goi,]
+  df <- as.data.frame(colData(sce))
+  goi_counts <- NULL
+  df$goi_counts <- counts(sce)[goi,]
 
-  plot = ggplot(as.data.frame(colData(sce)),  aes_string( x = "i7_ID"  , y = "i5_ID" )) +
+  plot = ggplot(df,  aes_string( x = "i7_ID"  , y = "i5_ID" )) +
     scale_y_discrete(limits = rev(levels(sce$i5_ID))) +
     geom_point( aes(size = log10(goi_counts+0.1)), shape = 21, stroke = 0.2, color = "darkgrey", fill = "firebrick1", alpha = 0.5) +
     geom_text(aes(label = round(goi_counts,0)))+
